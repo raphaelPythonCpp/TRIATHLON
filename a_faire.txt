@@ -1,5 +1,4 @@
 S:
-- débug le classement dynamique + régler la fin
 
 XS :
 - créer GPX
