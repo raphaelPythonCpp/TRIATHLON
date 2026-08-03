@@ -116,6 +116,7 @@ def changer_mode_couleur(_):
 """....................A REMPLIR ....................."""
 lTemps2D = np.array([????????????????????????????????])
 lTempsObjectifs = ???????????????????????????????????
+plt.suptitle(??????????????????????????, fontsize=20, fontweight="bold", fontstyle="italic")
 """...................FIN A REMPLIR...................."""
 """.....................EXEMPLE........................
 lTemps2D = np.array([[49.18, 50.68, 49.97, 49.41], #s
@@ -129,6 +130,7 @@ lTempsObjectifs = np.array([[50, 50, 50, 50],     #exemple 2
                              [50, 50, 50, 50],
                              [50, 50, 50, 50],
                              [50, 50, 50, 50]])
+plt.suptitle("Graphique du 5*1000m D=4' sur piste", fontsize=20, fontweight="bold", fontstyle="italic")
 ......................FIN EXEMPLE......................."""
 lTemps1D = lTemps2D.flatten()
 print(f"lTemps2D arrondie : {[[round(t, 1) for t in lT] for lT in lTemps2D.tolist()]}")
@@ -146,7 +148,6 @@ lModesCouleur = [("Monochrome"), ("Par bloc"), ("Par allure")]
 iModeCouleur = -1
 couleurModeMonochrome = (0, 0, 0.5)#(1, 0.84, 0)
 
-plt.suptitle("Graphique du 5*1000m D=4' sur piste", fontsize=20, fontweight="bold", fontstyle="italic")
 changer_mode_couleur(None)
 
 plt.show()
