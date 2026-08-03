@@ -9,8 +9,8 @@ def normalisation(l):
     return (l - np.min(l)) / (np.max(l)-np.min(l))
 
 def afficher():
-    yMin = np.min(lTemps1D)
-    yMax = np.max(lTemps1D)
+    yMin = np.minimum(np.min(lTempsObjectifs), np.min(lTemps1D))
+    yMax = np.maximum(np.max(lTempsObjectifs), np.max(lTemps1D))
     deltaY = yMax-yMin
 
     axeGraphiqueBar.clear()
@@ -24,8 +24,9 @@ def afficher():
     elif iModeCouleur == 2:
         c = normalisation(lYGB)
         lCGB = np.stack(couleur(c), axis=-1)
-    axeGraphiqueBar.bar(lXGB, lYGB, color=lCGB)
-    axeGraphiqueBar.axhline(y=tempsObjectif, linestyle="--", linewidth=1, alpha=0.7, color="black")
+    lTGB = lTempsObjectifs.flatten()
+    axeGraphiqueBar.plot(lXGB, lTGB, linestyle="--", linewidth=1, alpha=0.7, color="black", zorder=1)
+    axeGraphiqueBar.bar(lXGB, lYGB, color=lCGB, alpha=1)
     xMinGB, xMaxGB = np.min(lXGB), np.max(lXGB)
     bordureXGB = 0.1*(xMaxGB-xMinGB)
     axeGraphiqueBar.set_xlim(xMinGB-bordureXGB, xMaxGB+bordureXGB)
@@ -45,8 +46,9 @@ def afficher():
     elif iModeCouleur == 2:
         c = normalisation(listeLYGS)
         lCGS = np.stack(couleur(c), axis=-1)
+    lTGS = lTempsObjectifs
+    axeGraphiqueSimultane.plot(lXGS.flatten(), lTGS.flatten(), linestyle="--", linewidth=1, alpha=0.7, color="black", zorder=1)
     axeGraphiqueSimultane.scatter(lXGS, listeLYGS, c=lCGS.reshape(-1, 3))
-    axeGraphiqueSimultane.axhline(y=tempsObjectif, linestyle="--", linewidth=1, alpha=0.7, color="black")
     xMinGS, xMaxGS = np.min(lXGS), np.max(lXGS)
     margeXGS = 0.1*(xMaxGS-xMinGS)
     axeGraphiqueSimultane.set_xlim(xMinGS-margeXGS, xMaxGS+margeXGS)
@@ -66,8 +68,9 @@ def afficher():
     elif iModeCouleur == 2:
         c = normalisation(listeLYGV)
         lCGV = np.stack(couleur(c), axis=-1)
-    axeGraphiqueVertical.scatter(lXGV, listeLYGV, c=lCGV.reshape(-1, 3))
-    axeGraphiqueVertical.axhline(y=tempsObjectif, linestyle="--", linewidth=1, alpha=0.7, color="black")
+    lTGV = np.array([np.mean(lT) for lT in lTempsObjectifs])
+    axeGraphiqueVertical.plot(lXGV, lTGV, linestyle="--", linewidth=1, alpha=0.7, color="black", zorder=1)
+    axeGraphiqueVertical.scatter(lXGV, listeLYGV, c=lCGV.reshape(-1, 3), alpha=1)
     xMinGV, xMaxGV = np.min(lXGV), np.max(lXGV)
     margeXGV = 0.1*(xMaxGV-xMinGV)
     axeGraphiqueVertical.set_xlim(xMinGV-margeXGV, xMaxGV+margeXGV)
@@ -89,9 +92,10 @@ def afficher():
     elif iModeCouleur == 2:
         c = normalisation(lYGE)
         lCGE = np.stack(couleur(c), axis=-1)
+    lTGE = np.array([np.mean(lT) for lT in lTempsObjectifs])
+    axeGraphiqueErreur.plot(lXGE, lTGE, linestyle="--", linewidth=1, alpha=0.7, color="black", zorder=1)
     for i in range(len(lXGE)):
-        axeGraphiqueErreur.errorbar(lXGE[i], lYGE[i], yerr=[[lYGE[i]-lYMinGE[i]], [lYMaxGE[i]-lYGE[i]]], fmt='o', capsize=5, color=lCGE[i], ecolor=lCGE[i])
-    axeGraphiqueErreur.axhline(y=tempsObjectif, linestyle="--", linewidth=1, alpha=0.7, color="black")
+        axeGraphiqueErreur.errorbar(lXGE[i], lYGE[i], yerr=[[lYGE[i]-lYMinGE[i]], [lYMaxGE[i]-lYGE[i]]], fmt='o', capsize=5, color=lCGE[i], ecolor=lCGE[i], alpha=1)
     xMinGE, xMaxGE = np.min(lXGE), np.max(lXGE)
     margeXGE = 0.1*(xMaxGE-xMinGE)
     axeGraphiqueErreur.set_xlim(xMinGE-margeXGE, xMaxGE+margeXGE)
@@ -110,9 +114,8 @@ def changer_mode_couleur(_):
     afficher()
 
 """....................A REMPLIR ....................."""
-lTemps2D = np.array([]) #s
-tempsObjectif = 0 #s
-distance = 0 #m
+lTemps2D = np.array([????????????????????????????????])
+lTempsObjectifs = ???????????????????????????????????
 """...................FIN A REMPLIR...................."""
 """.....................EXEMPLE........................
 lTemps2D = np.array([[49.18, 50.68, 49.97, 49.41], #s
@@ -120,8 +123,12 @@ lTemps2D = np.array([[49.18, 50.68, 49.97, 49.41], #s
                      [49.12, 52.77, 50.77, 49.57],
                      [50.83, 53.69, 52.74, 51.44], 
                      [51.42, 54.23, 53.10, 49.81]])
-tempsObjectif = 53 #s
-distance = 250 #m
+#Pour le temps, soit recopier l'exemple 1 si c'est toujours la même distance, sinon l'exemple 2
+lTempsObjectifs = np.tile(50, (*lTemps2D.shape,)) #exemple 1
+lTempsObjectifs = np.array([[50, 50, 50, 50],     #exemple 2
+                             [50, 50, 50, 50],
+                             [50, 50, 50, 50],
+                             [50, 50, 50, 50]])
 ......................FIN EXEMPLE......................."""
 lTemps1D = lTemps2D.flatten()
 print(f"lTemps2D arrondie : {[[round(t, 1) for t in lT] for lT in lTemps2D.tolist()]}")
